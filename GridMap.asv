@@ -1,9 +1,10 @@
+axes('Units', 'normalized', 'Position', [0 0 1 1])
 background = imread('resources/desert_island_background.jpg');
-image([-200, 1200], [-200, 1200], background);
+image([-500, 1500], [-200, 1200], background);
 
 hold on
 grid off
-axis square
+axis equal
 axis off
 
 [grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread('resources/grid_10_10.png');
@@ -94,37 +95,46 @@ treasure;
 
 score = 0;
 
-% score_text = annotation('textbox');
-% score_text.Position = [0, 0, 0., 0.1];
-% score_text.String = "Score: " + score;
-% score_text.FontSize = 1;
-% score_text.FontUnits = "normalized";
-% score_text.FontWeight = "bold";
-% score_text.Color = 'k';
-% score_text.BackgroundColor = 'white';
-% score_text.FaceAlpha = 1;
-% score_text.FitBoxToText = 'on';
-
-score_text = text(1100, 1100, 'text');
+score_text = text(825, -110, 'text');
 score_text.String = "Score: " + score;
-score_text.FontSize = 1;
+score_text.FontSize = 17;
 score_text.FontUnits = "normalized";
+score_text.FontName = "Papyrus";
 score_text.FontWeight = "bold";
 score_text.Color = 'k';
 score_text.BackgroundColor = 'white';
-score_text.FaceAlpha = 1;
-score_text.FitBoxToText = 'on';
+score_text.EdgeColor = 'k';
+score_text.LineWidth = 1;
 
-turns_remaining_text = annotation('textbox');
-turns_remaining_text.Position = [0, 1, 0.1, 0.1];
+turns_remaining_text = text(-175, -110, 'text');
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
-turns_remaining_text.FontSize = 0.1;
+turns_remaining_text.FontSize = 17;
 turns_remaining_text.FontUnits = "normalized";
+turns_remaining_text.FontName = "Papyrus";
 turns_remaining_text.FontWeight = "bold";
 turns_remaining_text.Color = 'k';
 turns_remaining_text.BackgroundColor = 'white';
-turns_remaining_text.FaceAlpha = 1;
-turns_remaining_text.FitBoxToText = 'on';
+turns_remaining_text.EdgeColor = 'k';
+turns_remaining_text.LineWidth = 1;
+
+columns_text = text(25, 1025, 'A B C D E F G H I J');
+columns_text.FontSize = 17.5;
+columns_text.FontUnits = "normalized";
+columns_text.FontWeight = "bold";
+columns_text.FontName = "Monospaced";
+columns_text.Color = 'k';
+
+S = '9876543210';
+row_labels = cell(1, numel(S));
+for i = 1:numel(S)
+  row_labels{i} = S(i);
+end
+row_labels_text = text(-60, 500, row_labels);
+row_labels_text.FontSize = 16;
+row_labels_text.FontUnits = "normalized";
+row_labels_text.FontWeight = "bold";
+row_labels_text.FontName = "Monospaced";
+row_labels_text.Color = 'k';
 
 for i = 1:no_attempts
     turn_done = 0;

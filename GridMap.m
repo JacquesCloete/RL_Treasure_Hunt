@@ -12,7 +12,7 @@ image([-10, 1010], [-10, 1010], grid_10_10, 'AlphaData', grid_10_10_alpha)
 
 no_clue_types = 4;
 no_true_clue_types = 1;
-no_clues_per_type = 3;s
+no_clues_per_type = 3;
 no_attempts = 15;
 
 % Load images
@@ -95,38 +95,46 @@ treasure;
 
 score = 0;
 
-% score_text = annotation('textbox');
-% score_text.Position = [0, 0, 0., 0.1];
-% score_text.String = "Score: " + score;
-% score_text.FontSize = 1;
-% score_text.FontUnits = "normalized";
-% score_text.FontWeight = "bold";
-% score_text.Color = 'k';
-% score_text.BackgroundColor = 'white';
-% score_text.FaceAlpha = 1;
-% score_text.FitBoxToText = 'on';
-
 score_text = text(825, -110, 'text');
 score_text.String = "Score: " + score;
-score_text.FontSize = 15;
+score_text.FontSize = 18;
 score_text.FontUnits = "normalized";
 score_text.FontName = "Papyrus";
 score_text.FontWeight = "bold";
 score_text.Color = 'k';
 score_text.BackgroundColor = 'white';
 score_text.EdgeColor = 'k';
-score_text.LineWidth = 1;
+score_text.LineWidth = 2;
 
-turns_remaining_text = text(-175, -110, 'text');
+turns_remaining_text = text(-225, -110, 'text');
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
-turns_remaining_text.FontSize = 15;
+turns_remaining_text.FontSize = 18;
 turns_remaining_text.FontUnits = "normalized";
 turns_remaining_text.FontName = "Papyrus";
 turns_remaining_text.FontWeight = "bold";
 turns_remaining_text.Color = 'k';
 turns_remaining_text.BackgroundColor = 'white';
 turns_remaining_text.EdgeColor = 'k';
-turns_remaining_text.LineWidth = 1;
+turns_remaining_text.LineWidth = 2;
+
+column_labels_text = text(25, 1030, 'A B C D E F G H I J');
+column_labels_text.FontSize = 17.5;
+column_labels_text.FontUnits = "normalized";
+column_labels_text.FontWeight = "bold";
+column_labels_text.FontName = "Monospaced";
+column_labels_text.Color = 'k';
+
+S = '9876543210';
+row_labels = cell(1, numel(S));
+for i = 1:numel(S)
+  row_labels{i} = S(i);
+end
+row_labels_text = text(-60, 500, row_labels);
+row_labels_text.FontSize = 16;
+row_labels_text.FontUnits = "normalized";
+row_labels_text.FontWeight = "bold";
+row_labels_text.FontName = "Monospaced";
+row_labels_text.Color = 'k';
 
 for i = 1:no_attempts
     turn_done = 0;
