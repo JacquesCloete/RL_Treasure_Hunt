@@ -64,11 +64,7 @@ for ID=1:6
             available_clue_locations(i_y+1,i_x+1) = 0;
             if ismember(ID,true_clue_list)
                 % assign treasure around clue (TODO: replace with a function that can use a different pattern for each clue)
-                treasure(i_y, i_x-1) = treasure(i_y, i_x-1) + 1;
-                treasure(i_y-1, i_x) = treasure(i_y-1, i_x) + 1;
-                treasure(i_y, i_x) = treasure(i_y, i_x) + 1;
-                treasure(i_y, i_x+1) = treasure(i_y, i_x+1) + 1;
-                treasure(i_y+1, i_x) = treasure(i_y+1, i_x) + 1;
+                treasure = add_treasure(treasure,ID,i_y,i_x);
             end
             % plot corresonding image for clue ID
             if ID == 1
@@ -113,10 +109,12 @@ for i = 1:no_attempts
             fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
             image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], treasure_chest, 'AlphaData', treasure_chest_alpha*0.5)
             treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf('Current Score: %d', score)
             turn_done = 1;
         elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
             fill(square_xs,square_ys,'black','FaceAlpha',0.3)
             treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf('Current Score: %d', score)
             turn_done = 1;
         end
     end
