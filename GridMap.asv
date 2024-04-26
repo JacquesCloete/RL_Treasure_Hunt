@@ -1,10 +1,9 @@
-axes('Units', 'normalized', 'Position', [0 0 1 1])
 background = imread('resources/desert_island_background.jpg');
-image([-500, 1500], [-200, 1200], background);
+image([-200, 1200], [-200, 1200], background);
 
 hold on
 grid off
-axis equal
+axis square
 axis off
 
 [grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread('resources/grid_10_10.png');
@@ -12,7 +11,7 @@ image([-10, 1010], [-10, 1010], grid_10_10, 'AlphaData', grid_10_10_alpha)
 
 no_clue_types = 4;
 no_true_clue_types = 1;
-no_clues_per_type = 3;s
+no_clues_per_type = 3;
 no_attempts = 15;
 
 % Load images
@@ -106,27 +105,26 @@ score = 0;
 % score_text.FaceAlpha = 1;
 % score_text.FitBoxToText = 'on';
 
-score_text = text(825, -110, 'text');
+score_text = text(1100, 1100, 'text');
 score_text.String = "Score: " + score;
-score_text.FontSize = 15;
+score_text.FontSize = 1;
 score_text.FontUnits = "normalized";
-score_text.FontName = "Papyrus";
 score_text.FontWeight = "bold";
 score_text.Color = 'k';
 score_text.BackgroundColor = 'white';
-score_text.EdgeColor = 'k';
-score_text.LineWidth = 1;
+score_text.FaceAlpha = 1;
+score_text.FitBoxToText = 'on';
 
-turns_remaining_text = text(-175, -110, 'text');
+turns_remaining_text = annotation('textbox');
+turns_remaining_text.Position = [0, 1, 0.1, 0.1];
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
-turns_remaining_text.FontSize = 15;
+turns_remaining_text.FontSize = 0.1;
 turns_remaining_text.FontUnits = "normalized";
-turns_remaining_text.FontName = "Papyrus";
 turns_remaining_text.FontWeight = "bold";
 turns_remaining_text.Color = 'k';
 turns_remaining_text.BackgroundColor = 'white';
-turns_remaining_text.EdgeColor = 'k';
-turns_remaining_text.LineWidth = 1;
+turns_remaining_text.FaceAlpha = 1;
+turns_remaining_text.FitBoxToText = 'on';
 
 for i = 1:no_attempts
     turn_done = 0;
