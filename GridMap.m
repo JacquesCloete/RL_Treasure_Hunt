@@ -1,6 +1,6 @@
 axes('Units', 'normalized', 'Position', [0 0 1 1])
 background = imread('resources/desert_island_background.jpg');
-image([-500, 1500], [-200, 1200], background);
+image([-525, 1525], [-270, 1290], background);
 
 hold on
 grid off
@@ -24,6 +24,19 @@ no_attempts = 15;
 [shovel, shovel_map, shovel_alpha] = imread('resources/shovel.png'); % ID: 6
 [treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread('resources/treasure.png');
 [coin, coin_map, coin_alpha] = imread('resources/coin.png');
+[pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread('resources/pirate_boy.png');
+[pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread('resources/pirate_girl.png');
+[shark_fin, shark_fin_map, shark_fin_alpha] = imread('resources/shark_fin.png');
+[pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
+[shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
+
+image(-290, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(-360, 100, imresize(pirate_boy, 0.8), 'AlphaData', imresize(pirate_boy_alpha, 0.8))
+image(1057, 470, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(1017, -10, imresize(pirate_girl,0.8), 'AlphaData', imresize(pirate_girl_alpha, 0.8))
+image(-500, 1050, imresize(shark_fin,1), 'AlphaData', imresize(shark_fin_alpha, 1))
+image(1040, 960, imresize(shadow, 2), 'AlphaData', imresize(shadow_alpha, 2)*0.3)
+image(1025, 640, imresize(pirate_ship,0.7), 'AlphaData', imresize(pirate_ship_alpha, 0.7))
 
 ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all clue types
 
@@ -95,7 +108,7 @@ treasure;
 
 score = 0;
 
-score_text = text(825, -110, 'text');
+score_text = text(825, -150, 'text');
 score_text.String = "Score: " + score;
 score_text.FontSize = 18;
 score_text.FontUnits = "normalized";
@@ -106,7 +119,7 @@ score_text.BackgroundColor = 'white';
 score_text.EdgeColor = 'k';
 score_text.LineWidth = 2;
 
-turns_remaining_text = text(-225, -110, 'text');
+turns_remaining_text = text(-225, -150, 'text');
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
 turns_remaining_text.FontSize = 18;
 turns_remaining_text.FontUnits = "normalized";
@@ -118,7 +131,7 @@ turns_remaining_text.EdgeColor = 'k';
 turns_remaining_text.LineWidth = 2;
 
 column_labels_text = text(25, 1030, 'A B C D E F G H I J');
-column_labels_text.FontSize = 17.5;
+column_labels_text.FontSize = 16.8;
 column_labels_text.FontUnits = "normalized";
 column_labels_text.FontWeight = "bold";
 column_labels_text.FontName = "Monospaced";
@@ -130,7 +143,7 @@ for i = 1:numel(S)
   row_labels{i} = S(i);
 end
 row_labels_text = text(-60, 500, row_labels);
-row_labels_text.FontSize = 16;
+row_labels_text.FontSize = 15.2;
 row_labels_text.FontUnits = "normalized";
 row_labels_text.FontWeight = "bold";
 row_labels_text.FontName = "Monospaced";

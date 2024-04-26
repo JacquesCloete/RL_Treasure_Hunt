@@ -24,6 +24,18 @@ no_attempts = 15;
 [shovel, shovel_map, shovel_alpha] = imread('resources/shovel.png'); % ID: 6
 [treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread('resources/treasure.png');
 [coin, coin_map, coin_alpha] = imread('resources/coin.png');
+[pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread('resources/pirate_boy.png');
+[pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread('resources/pirate_girl.png');
+[shark_fin, shark_fin_map, shark_fin_alpha] = imread('resources/shark_fin.png');
+[pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
+[shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
+
+image(-290, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(-360, 100, imresize(pirate_boy, 0.8), 'AlphaData', imresize(pirate_boy_alpha, 0.8))
+image(-10, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(1010, -10, imresize(pirate_girl,0.8), 'AlphaData', imresize(pirate_girl_alpha, 0.8))
+image(-450, 1000, imresize(shark_fin,1), 'AlphaData', imresize(shark_fin_alpha, 1))
+image(1025, 600, imresize(pirate_ship,0.7), 'AlphaData', imresize(pirate_ship_alpha, 0.7))
 
 ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all clue types
 
@@ -97,32 +109,32 @@ score = 0;
 
 score_text = text(825, -110, 'text');
 score_text.String = "Score: " + score;
-score_text.FontSize = 17;
+score_text.FontSize = 18;
 score_text.FontUnits = "normalized";
 score_text.FontName = "Papyrus";
 score_text.FontWeight = "bold";
 score_text.Color = 'k';
 score_text.BackgroundColor = 'white';
 score_text.EdgeColor = 'k';
-score_text.LineWidth = 1;
+score_text.LineWidth = 2;
 
-turns_remaining_text = text(-175, -110, 'text');
+turns_remaining_text = text(-225, -110, 'text');
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
-turns_remaining_text.FontSize = 17;
+turns_remaining_text.FontSize = 18;
 turns_remaining_text.FontUnits = "normalized";
 turns_remaining_text.FontName = "Papyrus";
 turns_remaining_text.FontWeight = "bold";
 turns_remaining_text.Color = 'k';
 turns_remaining_text.BackgroundColor = 'white';
 turns_remaining_text.EdgeColor = 'k';
-turns_remaining_text.LineWidth = 1;
+turns_remaining_text.LineWidth = 2;
 
-columns_text = text(25, 1025, 'A B C D E F G H I J');
-columns_text.FontSize = 17.5;
-columns_text.FontUnits = "normalized";
-columns_text.FontWeight = "bold";
-columns_text.FontName = "Monospaced";
-columns_text.Color = 'k';
+column_labels_text = text(25, 1030, 'A B C D E F G H I J');
+column_labels_text.FontSize = 17.5;
+column_labels_text.FontUnits = "normalized";
+column_labels_text.FontWeight = "bold";
+column_labels_text.FontName = "Monospaced";
+column_labels_text.Color = 'k';
 
 S = '9876543210';
 row_labels = cell(1, numel(S));
