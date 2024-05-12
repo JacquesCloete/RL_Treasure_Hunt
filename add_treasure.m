@@ -15,4 +15,3 @@ elseif ID == 4 || ID == 5 || ID == 6
     new_treasure(i_y+1, i_x+1) = treasure(i_y+1, i_x+1) + 1;
 end
 end
-

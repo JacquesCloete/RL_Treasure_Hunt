@@ -10,10 +10,15 @@ axis off
 [grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread('resources/grid_10_10.png');
 image([-10, 1010], [-10, 1010], grid_10_10, 'AlphaData', grid_10_10_alpha)
 
-no_clue_types = 4;
+no_clue_types = 3;
 no_true_clue_types = 1;
 no_clues_per_type = 3;
 no_attempts = 15;
+
+generate_random_pattern = false;
+a = [1 1 1 1 0 0 0 0];
+a_rand = a(randperm(length(a)));
+random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
 
 % Load images
 [anchor, anchor_map, anchor_alpha] = imread('resources/anchor.png'); % ID: 1
@@ -84,7 +89,12 @@ for ID=1:6
             available_clue_locations(i_y+1,i_x+1) = 0;
             if ismember(ID,true_clue_list)
                 % assign treasure around clue (TODO: replace with a function that can use a different pattern for each clue)
-                treasure = add_treasure(treasure,ID,i_y,i_x);
+                if generate_random_pattern
+                    treasure = add_treasure_random(treasure,ID,i_y,i_x, random_pattern);
+                else
+                    treasure = add_treasure(treasure,ID,i_y,i_x);
+                end
+          
             end
             % plot corresonding image for clue ID
             if ID == 1
