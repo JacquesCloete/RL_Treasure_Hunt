@@ -15,7 +15,7 @@ no_true_clue_types = 1;
 no_clues_per_type = 3;
 no_attempts = 15;
 
-generate_random_pattern = false;
+generate_random_pattern = true;
 a = [1 1 1 1 0 0 0 0];
 a_rand = a(randperm(length(a)));
 random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
@@ -180,11 +180,17 @@ for i = 1:no_attempts
             if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
                 score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
                 fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
-                image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
+                if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 2
+                    image([(grid_loc_x)*100 - 5, (grid_loc_x+1)*100 - 5], [(grid_loc_y)*100 - 5, (grid_loc_y+1)*100 - 5], coin, 'AlphaData', coin_alpha*0.5)
+                    image([(grid_loc_x)*100 + 5, (grid_loc_x+1)*100 + 5], [(grid_loc_y)*100 + 5, (grid_loc_y+1)*100 + 5], coin, 'AlphaData', coin_alpha*0.5)
+                else
+                    image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
+                end
                 treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
                 sprintf('Current Score: %d', score)
                 score_text.String = "Score: " + score;
-                turn_done = 1;
+                turn_done = 1; 
+            
             elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
                 fill(square_xs,square_ys,'black','FaceAlpha',0.3)
                 treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
