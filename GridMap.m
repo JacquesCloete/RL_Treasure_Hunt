@@ -175,20 +175,22 @@ for i = 1:no_attempts
         
         square_xs = [grid_square_x, grid_square_x + 100, grid_square_x + 100, grid_square_x];
         square_ys = [grid_square_y, grid_square_y, grid_square_y + 100, grid_square_y + 100];
-    
-        if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
-            score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
-            fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
-            image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
-            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
-            sprintf('Current Score: %d', score)
-            score_text.String = "Score: " + score;
-            turn_done = 1;
-        elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
-            fill(square_xs,square_ys,'black','FaceAlpha',0.3)
-            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
-            sprintf('Current Score: %d', score)
-            turn_done = 1;
+        
+        if grid_loc_x >= 0 && grid_loc_x <= 9 && grid_loc_y >= 0 && grid_loc_y <= 9 
+            if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
+                score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
+                fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
+                image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
+                treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+                sprintf('Current Score: %d', score)
+                score_text.String = "Score: " + score;
+                turn_done = 1;
+            elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
+                fill(square_xs,square_ys,'black','FaceAlpha',0.3)
+                treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+                sprintf('Current Score: %d', score)
+                turn_done = 1;
+            end
         end
     end
     turns_remaining = no_attempts-i;

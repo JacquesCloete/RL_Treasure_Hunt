@@ -1,0 +1,485 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GridMap</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2024-05-12"><meta name="DC.source" content="GridMap.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">axes(<span class="string">'Units'</span>, <span class="string">'normalized'</span>, <span class="string">'Position'</span>, [0 0 1 1])
+background = imread(<span class="string">'resources/desert_island_background.jpg'</span>);
+image([-525, 1525], [-270, 1290], background);
+
+hold <span class="string">on</span>
+grid <span class="string">off</span>
+axis <span class="string">equal</span>
+axis <span class="string">off</span>
+
+[grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread(<span class="string">'resources/grid_10_10.png'</span>);
+image([-10, 1010], [-10, 1010], grid_10_10, <span class="string">'AlphaData'</span>, grid_10_10_alpha)
+
+no_clue_types = 3;
+no_true_clue_types = 1;
+no_clues_per_type = 3;
+no_attempts = 15;
+
+generate_random_pattern = false;
+a = [1 1 1 1 0 0 0 0];
+a_rand = a(randperm(length(a)));
+random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
+
+<span class="comment">% Load images</span>
+[anchor, anchor_map, anchor_alpha] = imread(<span class="string">'resources/anchor.png'</span>); <span class="comment">% ID: 1</span>
+[barrel, barrel_map, barrel_alpha] = imread(<span class="string">'resources/barrel.png'</span>); <span class="comment">% ID: 2</span>
+[bush, bush_map, bush_alpha] = imread(<span class="string">'resources/bush.png'</span>); <span class="comment">% ID: 3</span>
+[palm_tree, palm_tree_map, palm_tree_alpha] = imread(<span class="string">'resources/palm_tree.png'</span>); <span class="comment">% ID: 4</span>
+[rock, rock_map, rock_alpha] = imread(<span class="string">'resources/rock.png'</span>); <span class="comment">% ID: 5</span>
+[shovel, shovel_map, shovel_alpha] = imread(<span class="string">'resources/shovel.png'</span>); <span class="comment">% ID: 6</span>
+[treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread(<span class="string">'resources/treasure.png'</span>);
+[coin, coin_map, coin_alpha] = imread(<span class="string">'resources/coin.png'</span>);
+[pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread(<span class="string">'resources/pirate_boy.png'</span>);
+[pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread(<span class="string">'resources/pirate_girl.png'</span>);
+[shark_fin, shark_fin_map, shark_fin_alpha] = imread(<span class="string">'resources/shark_fin.png'</span>);
+[pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread(<span class="string">'resources/pirate_ship.png'</span>);
+[shadow, shadow_map, shadow_alpha] = imread(<span class="string">'resources/shadow.png'</span>);
+
+image(-290, 570, imresize(shadow, 1), <span class="string">'AlphaData'</span>, imresize(shadow_alpha, 1)*0.3)
+image(-360, 100, imresize(pirate_boy, 0.8), <span class="string">'AlphaData'</span>, imresize(pirate_boy_alpha, 0.8))
+image(1057, 470, imresize(shadow, 1), <span class="string">'AlphaData'</span>, imresize(shadow_alpha, 1)*0.3)
+image(1017, -10, imresize(pirate_girl,0.8), <span class="string">'AlphaData'</span>, imresize(pirate_girl_alpha, 0.8))
+image(-500, 1050, imresize(shark_fin,1), <span class="string">'AlphaData'</span>, imresize(shark_fin_alpha, 1))
+image(1040, 960, imresize(shadow, 2), <span class="string">'AlphaData'</span>, imresize(shadow_alpha, 2)*0.3)
+image(1025, 640, imresize(pirate_ship,0.7), <span class="string">'AlphaData'</span>, imresize(pirate_ship_alpha, 0.7))
+
+ID_list = [1, 2, 3, 4, 5, 6]; <span class="comment">% list of IDs for all clue types</span>
+
+<span class="comment">% create list of clues (subset of ID_list)</span>
+clue_list = ID_list;
+<span class="keyword">for</span> i=1:(numel(ID_list)-no_clue_types)
+    idx = randi(numel(clue_list));
+    clue_list(idx) = [];
+<span class="keyword">end</span>
+
+<span class="comment">% create list of true clues (subset of clue_list)</span>
+true_clue_list = clue_list;
+<span class="keyword">for</span> i=1:(numel(clue_list)-no_true_clue_types)
+    idx = randi(numel(true_clue_list));
+    true_clue_list(idx) = [];
+<span class="keyword">end</span>
+
+available_clue_locations = zeros(10, 10);
+available_clue_locations(2:9,2:9) = 1; <span class="comment">% don't let clues spawn on edges</span>
+
+treasure = zeros(10, 10);
+
+<span class="keyword">for</span> ID=1:6
+    <span class="keyword">if</span> ismember(ID,clue_list)
+        <span class="comment">% randomly generate new clue location from available spots</span>
+        <span class="keyword">for</span> i = 1:no_clues_per_type
+            is_valid = 0;
+            it = 0;
+            it_max = 1000;
+            <span class="keyword">while</span> is_valid == 0 &amp;&amp; it &lt; it_max
+                i_y = randi([2,9]);
+                i_x = randi([2,9]);
+                is_valid = available_clue_locations(i_y,i_x);
+                it = it + 1;
+            <span class="keyword">end</span>
+            <span class="comment">% stop future clues from spawning adjacent to this one</span>
+            available_clue_locations(i_y-1,i_x-1) = 0;
+            available_clue_locations(i_y,i_x-1) = 0;
+            available_clue_locations(i_y-1,i_x) = 0;
+            available_clue_locations(i_y-1,i_x+1) = 0;
+            available_clue_locations(i_y,i_x) = 0;
+            available_clue_locations(i_y+1,i_x-1) = 0;
+            available_clue_locations(i_y+1,i_x) = 0;
+            available_clue_locations(i_y,i_x+1) = 0;
+            available_clue_locations(i_y+1,i_x+1) = 0;
+            <span class="keyword">if</span> ismember(ID,true_clue_list)
+                <span class="comment">% assign treasure around clue (TODO: replace with a function that can use a different pattern for each clue)</span>
+                <span class="keyword">if</span> generate_random_pattern
+                    treasure = add_treasure_random(treasure,ID,i_y,i_x, random_pattern);
+                <span class="keyword">else</span>
+                    treasure = add_treasure(treasure,ID,i_y,i_x);
+                <span class="keyword">end</span>
+
+            <span class="keyword">end</span>
+            <span class="comment">% plot corresonding image for clue ID</span>
+            <span class="keyword">if</span> ID == 1
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], anchor, <span class="string">'AlphaData'</span>, anchor_alpha)
+            <span class="keyword">elseif</span> ID == 2
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], barrel, <span class="string">'AlphaData'</span>, barrel_alpha)
+            <span class="keyword">elseif</span> ID == 3
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], bush, <span class="string">'AlphaData'</span>, bush_alpha)
+            <span class="keyword">elseif</span> ID == 4
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], palm_tree, <span class="string">'AlphaData'</span>, palm_tree_alpha)
+            <span class="keyword">elseif</span> ID == 5
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], rock, <span class="string">'AlphaData'</span>, rock_alpha)
+            <span class="keyword">elseif</span> ID == 6
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], shovel, <span class="string">'AlphaData'</span>, shovel_alpha)
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+treasure;
+
+score = 0;
+
+score_text = text(825, -150, <span class="string">'text'</span>);
+score_text.String = <span class="string">"Score: "</span> + score;
+score_text.FontSize = 18;
+score_text.FontUnits = <span class="string">"normalized"</span>;
+score_text.FontName = <span class="string">"Papyrus"</span>;
+score_text.FontWeight = <span class="string">"bold"</span>;
+score_text.Color = <span class="string">'k'</span>;
+score_text.BackgroundColor = <span class="string">'white'</span>;
+score_text.EdgeColor = <span class="string">'k'</span>;
+score_text.LineWidth = 2;
+
+turns_remaining_text = text(-225, -150, <span class="string">'text'</span>);
+turns_remaining_text.String = <span class="string">"Turns Remaining: "</span> + no_attempts;
+turns_remaining_text.FontSize = 18;
+turns_remaining_text.FontUnits = <span class="string">"normalized"</span>;
+turns_remaining_text.FontName = <span class="string">"Papyrus"</span>;
+turns_remaining_text.FontWeight = <span class="string">"bold"</span>;
+turns_remaining_text.Color = <span class="string">'k'</span>;
+turns_remaining_text.BackgroundColor = <span class="string">'white'</span>;
+turns_remaining_text.EdgeColor = <span class="string">'k'</span>;
+turns_remaining_text.LineWidth = 2;
+
+column_labels_text = text(25, 1030, <span class="string">'A B C D E F G H I J'</span>);
+column_labels_text.FontSize = 16.8;
+column_labels_text.FontUnits = <span class="string">"normalized"</span>;
+column_labels_text.FontWeight = <span class="string">"bold"</span>;
+column_labels_text.FontName = <span class="string">"Monospaced"</span>;
+column_labels_text.Color = <span class="string">'k'</span>;
+
+S = <span class="string">'9876543210'</span>;
+row_labels = cell(1, numel(S));
+<span class="keyword">for</span> i = 1:numel(S)
+  row_labels{i} = S(i);
+<span class="keyword">end</span>
+row_labels_text = text(-60, 500, row_labels);
+row_labels_text.FontSize = 15.2;
+row_labels_text.FontUnits = <span class="string">"normalized"</span>;
+row_labels_text.FontWeight = <span class="string">"bold"</span>;
+row_labels_text.FontName = <span class="string">"Monospaced"</span>;
+row_labels_text.Color = <span class="string">'k'</span>;
+
+<span class="keyword">for</span> i = 1:no_attempts
+    turn_done = 0;
+    it = 0;
+    it_max = 1000;
+    <span class="comment">% note: only allows an unsearched tile to be selected with each attempt</span>
+    <span class="keyword">while</span> turn_done == 0 &amp;&amp; it &lt; it_max
+        [xco, yco] = ginput(1);
+
+        grid_loc_x = floor(xco / 100);
+        grid_loc_y = floor(yco / 100);
+
+        grid_square_x = grid_loc_x * 100;
+        grid_square_y = grid_loc_y * 100;
+
+        square_xs = [grid_square_x, grid_square_x + 100, grid_square_x + 100, grid_square_x];
+        square_ys = [grid_square_y, grid_square_y, grid_square_y + 100, grid_square_y + 100];
+
+        <span class="keyword">if</span> treasure(grid_loc_y + 1, grid_loc_x + 1) &gt;= 1
+            score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
+            fill(square_xs,square_ys,<span class="string">'yellow'</span>,<span class="string">'FaceAlpha'</span>,0.3)
+            image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, <span class="string">'AlphaData'</span>, coin_alpha*0.5)
+            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf(<span class="string">'Current Score: %d'</span>, score)
+            score_text.String = <span class="string">"Score: "</span> + score;
+            turn_done = 1;
+        <span class="keyword">elseif</span> treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
+            fill(square_xs,square_ys,<span class="string">'black'</span>,<span class="string">'FaceAlpha'</span>,0.3)
+            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf(<span class="string">'Current Score: %d'</span>, score)
+            turn_done = 1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    turns_remaining = no_attempts-i;
+    turns_remaining_text.String = <span class="string">"Turns Remaining: "</span> + turns_remaining;
+    <span class="keyword">if</span> turns_remaining &lt;= 5
+        turns_remaining_text.Color = <span class="string">'r'</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+random_pattern =
+
+     1     0     0     0     1     0     1     1     1
+
+
+ans =
+
+    'Current Score: 0'
+
+</pre><pre class="codeoutput error">Error using ginput (line 84)
+Interrupted by figure deletion
+
+Error in GridMap (line 168)
+        [xco, yco] = ginput(1);
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+axes('Units', 'normalized', 'Position', [0 0 1 1])
+background = imread('resources/desert_island_background.jpg');
+image([-525, 1525], [-270, 1290], background);
+
+hold on
+grid off
+axis equal
+axis off
+
+[grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread('resources/grid_10_10.png');
+image([-10, 1010], [-10, 1010], grid_10_10, 'AlphaData', grid_10_10_alpha)
+
+no_clue_types = 3;
+no_true_clue_types = 1;
+no_clues_per_type = 3;
+no_attempts = 15;
+
+generate_random_pattern = false;
+a = [1 1 1 1 0 0 0 0];
+a_rand = a(randperm(length(a)));
+random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
+
+% Load images
+[anchor, anchor_map, anchor_alpha] = imread('resources/anchor.png'); % ID: 1
+[barrel, barrel_map, barrel_alpha] = imread('resources/barrel.png'); % ID: 2
+[bush, bush_map, bush_alpha] = imread('resources/bush.png'); % ID: 3
+[palm_tree, palm_tree_map, palm_tree_alpha] = imread('resources/palm_tree.png'); % ID: 4
+[rock, rock_map, rock_alpha] = imread('resources/rock.png'); % ID: 5
+[shovel, shovel_map, shovel_alpha] = imread('resources/shovel.png'); % ID: 6
+[treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread('resources/treasure.png');
+[coin, coin_map, coin_alpha] = imread('resources/coin.png');
+[pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread('resources/pirate_boy.png');
+[pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread('resources/pirate_girl.png');
+[shark_fin, shark_fin_map, shark_fin_alpha] = imread('resources/shark_fin.png');
+[pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
+[shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
+
+image(-290, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(-360, 100, imresize(pirate_boy, 0.8), 'AlphaData', imresize(pirate_boy_alpha, 0.8))
+image(1057, 470, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(1017, -10, imresize(pirate_girl,0.8), 'AlphaData', imresize(pirate_girl_alpha, 0.8))
+image(-500, 1050, imresize(shark_fin,1), 'AlphaData', imresize(shark_fin_alpha, 1))
+image(1040, 960, imresize(shadow, 2), 'AlphaData', imresize(shadow_alpha, 2)*0.3)
+image(1025, 640, imresize(pirate_ship,0.7), 'AlphaData', imresize(pirate_ship_alpha, 0.7))
+
+ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all clue types
+
+% create list of clues (subset of ID_list)
+clue_list = ID_list;
+for i=1:(numel(ID_list)-no_clue_types)
+    idx = randi(numel(clue_list));
+    clue_list(idx) = [];
+end
+
+% create list of true clues (subset of clue_list)
+true_clue_list = clue_list;
+for i=1:(numel(clue_list)-no_true_clue_types)
+    idx = randi(numel(true_clue_list));
+    true_clue_list(idx) = [];
+end
+
+available_clue_locations = zeros(10, 10);
+available_clue_locations(2:9,2:9) = 1; % don't let clues spawn on edges
+
+treasure = zeros(10, 10);
+
+for ID=1:6
+    if ismember(ID,clue_list)
+        % randomly generate new clue location from available spots
+        for i = 1:no_clues_per_type
+            is_valid = 0;
+            it = 0;
+            it_max = 1000;
+            while is_valid == 0 && it < it_max
+                i_y = randi([2,9]);
+                i_x = randi([2,9]);
+                is_valid = available_clue_locations(i_y,i_x);
+                it = it + 1;
+            end
+            % stop future clues from spawning adjacent to this one
+            available_clue_locations(i_y-1,i_x-1) = 0;
+            available_clue_locations(i_y,i_x-1) = 0;
+            available_clue_locations(i_y-1,i_x) = 0;
+            available_clue_locations(i_y-1,i_x+1) = 0;
+            available_clue_locations(i_y,i_x) = 0;
+            available_clue_locations(i_y+1,i_x-1) = 0;
+            available_clue_locations(i_y+1,i_x) = 0;
+            available_clue_locations(i_y,i_x+1) = 0;
+            available_clue_locations(i_y+1,i_x+1) = 0;
+            if ismember(ID,true_clue_list)
+                % assign treasure around clue (TODO: replace with a function that can use a different pattern for each clue)
+                if generate_random_pattern
+                    treasure = add_treasure_random(treasure,ID,i_y,i_x, random_pattern);
+                else
+                    treasure = add_treasure(treasure,ID,i_y,i_x);
+                end
+          
+            end
+            % plot corresonding image for clue ID
+            if ID == 1
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], anchor, 'AlphaData', anchor_alpha)
+            elseif ID == 2
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], barrel, 'AlphaData', barrel_alpha)
+            elseif ID == 3
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], bush, 'AlphaData', bush_alpha)
+            elseif ID == 4
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], palm_tree, 'AlphaData', palm_tree_alpha)
+            elseif ID == 5
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], rock, 'AlphaData', rock_alpha)
+            elseif ID == 6
+                image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], shovel, 'AlphaData', shovel_alpha)
+            end
+        end
+    end
+end
+
+treasure;
+
+score = 0;
+
+score_text = text(825, -150, 'text');
+score_text.String = "Score: " + score;
+score_text.FontSize = 18;
+score_text.FontUnits = "normalized";
+score_text.FontName = "Papyrus";
+score_text.FontWeight = "bold";
+score_text.Color = 'k';
+score_text.BackgroundColor = 'white';
+score_text.EdgeColor = 'k';
+score_text.LineWidth = 2;
+
+turns_remaining_text = text(-225, -150, 'text');
+turns_remaining_text.String = "Turns Remaining: " + no_attempts;
+turns_remaining_text.FontSize = 18;
+turns_remaining_text.FontUnits = "normalized";
+turns_remaining_text.FontName = "Papyrus";
+turns_remaining_text.FontWeight = "bold";
+turns_remaining_text.Color = 'k';
+turns_remaining_text.BackgroundColor = 'white';
+turns_remaining_text.EdgeColor = 'k';
+turns_remaining_text.LineWidth = 2;
+
+column_labels_text = text(25, 1030, 'A B C D E F G H I J');
+column_labels_text.FontSize = 16.8;
+column_labels_text.FontUnits = "normalized";
+column_labels_text.FontWeight = "bold";
+column_labels_text.FontName = "Monospaced";
+column_labels_text.Color = 'k';
+
+S = '9876543210';
+row_labels = cell(1, numel(S));
+for i = 1:numel(S)
+  row_labels{i} = S(i);
+end
+row_labels_text = text(-60, 500, row_labels);
+row_labels_text.FontSize = 15.2;
+row_labels_text.FontUnits = "normalized";
+row_labels_text.FontWeight = "bold";
+row_labels_text.FontName = "Monospaced";
+row_labels_text.Color = 'k';
+
+for i = 1:no_attempts
+    turn_done = 0;
+    it = 0;
+    it_max = 1000;
+    % note: only allows an unsearched tile to be selected with each attempt
+    while turn_done == 0 && it < it_max
+        [xco, yco] = ginput(1);
+    
+        grid_loc_x = floor(xco / 100);
+        grid_loc_y = floor(yco / 100);
+        
+        grid_square_x = grid_loc_x * 100;
+        grid_square_y = grid_loc_y * 100;
+        
+        square_xs = [grid_square_x, grid_square_x + 100, grid_square_x + 100, grid_square_x];
+        square_ys = [grid_square_y, grid_square_y, grid_square_y + 100, grid_square_y + 100];
+    
+        if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
+            score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
+            fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
+            image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
+            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf('Current Score: %d', score)
+            score_text.String = "Score: " + score;
+            turn_done = 1;
+        elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
+            fill(square_xs,square_ys,'black','FaceAlpha',0.3)
+            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+            sprintf('Current Score: %d', score)
+            turn_done = 1;
+        end
+    end
+    turns_remaining = no_attempts-i;
+    turns_remaining_text.String = "Turns Remaining: " + turns_remaining;
+    if turns_remaining <= 5
+        turns_remaining_text.Color = 'r';
+    end
+end
+##### SOURCE END #####
+--></body></html>
