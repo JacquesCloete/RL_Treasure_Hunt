@@ -27,21 +27,23 @@ random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
 [palm_tree, palm_tree_map, palm_tree_alpha] = imread('resources/palm_tree.png'); % ID: 4
 [rock, rock_map, rock_alpha] = imread('resources/rock.png'); % ID: 5
 [shovel, shovel_map, shovel_alpha] = imread('resources/shovel.png'); % ID: 6
-[treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread('resources/treasure.png');
 [coin, coin_map, coin_alpha] = imread('resources/coin.png');
 [pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread('resources/pirate_boy.png');
+pirate_boy = flip(pirate_boy, 2);
+pirate_boy_alpha = flip(pirate_boy_alpha, 2);
 [pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread('resources/pirate_girl.png');
-[shark_fin, shark_fin_map, shark_fin_alpha] = imread('resources/shark_fin.png');
+[whale_tail, whale_tail_map, whale_tail_alpha] = imread('resources/whale_tail.png');
 [pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
 [shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
 
-image(-290, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
-image(-360, 100, imresize(pirate_boy, 0.8), 'AlphaData', imresize(pirate_boy_alpha, 0.8))
-image(1057, 470, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
-image(1017, -10, imresize(pirate_girl,0.8), 'AlphaData', imresize(pirate_girl_alpha, 0.8))
-image(-500, 1050, imresize(shark_fin,1), 'AlphaData', imresize(shark_fin_alpha, 1))
-image(1040, 960, imresize(shadow, 2), 'AlphaData', imresize(shadow_alpha, 2)*0.3)
-image(1025, 640, imresize(pirate_ship,0.7), 'AlphaData', imresize(pirate_ship_alpha, 0.7))
+
+image(-318, 640, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(-380, 100, imresize(pirate_boy, 0.3), 'AlphaData', imresize(pirate_boy_alpha, 0.3))
+image(1046, 527, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
+image(1017, -10, imresize(pirate_girl,0.3), 'AlphaData', imresize(pirate_girl_alpha, 0.3))
+image(-535, 820, imresize(whale_tail,1), 'AlphaData', imresize(whale_tail_alpha, 1))
+image(1040, 960, imresize(shadow, 2.15), 'AlphaData', imresize(shadow_alpha, 2.15)*0.3)
+image(1025, 640, imresize(pirate_ship,0.9), 'AlphaData', imresize(pirate_ship_alpha, 0.9))
 
 ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all clue types
 
@@ -140,7 +142,7 @@ turns_remaining_text.BackgroundColor = 'white';
 turns_remaining_text.EdgeColor = 'k';
 turns_remaining_text.LineWidth = 2;
 
-column_labels_text = text(25, 1030, 'A B C D E F G H I J');
+column_labels_text = text(25, 1040, 'A B C D E F G H I J');
 column_labels_text.FontSize = 16.8;
 column_labels_text.FontUnits = "normalized";
 column_labels_text.FontWeight = "bold";
@@ -153,7 +155,7 @@ for i = 1:numel(S)
   row_labels{i} = S(i);
 end
 row_labels_text = text(-60, 500, row_labels);
-row_labels_text.FontSize = 15.2;
+row_labels_text.FontSize = 16.8;
 row_labels_text.FontUnits = "normalized";
 row_labels_text.FontWeight = "bold";
 row_labels_text.FontName = "Monospaced";

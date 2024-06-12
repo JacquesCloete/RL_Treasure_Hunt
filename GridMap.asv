@@ -15,7 +15,7 @@ no_true_clue_types = 1;
 no_clues_per_type = 3;
 no_attempts = 15;
 
-generate_random_pattern = false;
+generate_random_pattern = true;
 a = [1 1 1 1 0 0 0 0];
 a_rand = a(randperm(length(a)));
 random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
@@ -27,11 +27,10 @@ random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
 [palm_tree, palm_tree_map, palm_tree_alpha] = imread('resources/palm_tree.png'); % ID: 4
 [rock, rock_map, rock_alpha] = imread('resources/rock.png'); % ID: 5
 [shovel, shovel_map, shovel_alpha] = imread('resources/shovel.png'); % ID: 6
-[treasure_chest, treasure_chest_map, treasure_chest_alpha] = imread('resources/treasure.png');
 [coin, coin_map, coin_alpha] = imread('resources/coin.png');
 [pirate_boy, pirate_boy_map, pirate_boy_alpha] = imread('resources/pirate_boy.png');
 [pirate_girl, pirate_girl_map, pirate_girl_alpha] = imread('resources/pirate_girl.png');
-[shark_fin, shark_fin_map, shark_fin_alpha] = imread('resources/shark_fin.png');
+[whale_tail, whale_tail_map, whale_tail_alpha] = imread('resources/whale_tail.png');
 [pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
 [shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
 
@@ -39,7 +38,7 @@ image(-290, 570, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3
 image(-360, 100, imresize(pirate_boy, 0.8), 'AlphaData', imresize(pirate_boy_alpha, 0.8))
 image(1057, 470, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
 image(1017, -10, imresize(pirate_girl,0.8), 'AlphaData', imresize(pirate_girl_alpha, 0.8))
-image(-500, 1050, imresize(shark_fin,1), 'AlphaData', imresize(shark_fin_alpha, 1))
+image(-500, 1050, imresize(whale_tail,1), 'AlphaData', imresize(whale_tail_alpha, 1))
 image(1040, 960, imresize(shadow, 2), 'AlphaData', imresize(shadow_alpha, 2)*0.3)
 image(1025, 640, imresize(pirate_ship,0.7), 'AlphaData', imresize(pirate_ship_alpha, 0.7))
 
@@ -140,7 +139,7 @@ turns_remaining_text.BackgroundColor = 'white';
 turns_remaining_text.EdgeColor = 'k';
 turns_remaining_text.LineWidth = 2;
 
-column_labels_text = text(25, 1030, 'A B C D E F G H I J');
+column_labels_text = text(25, 1040, 'A B C D E F G H I J');
 column_labels_text.FontSize = 16.8;
 column_labels_text.FontUnits = "normalized";
 column_labels_text.FontWeight = "bold";
@@ -153,7 +152,7 @@ for i = 1:numel(S)
   row_labels{i} = S(i);
 end
 row_labels_text = text(-60, 500, row_labels);
-row_labels_text.FontSize = 15.2;
+row_labels_text.FontSize = 16.8;
 row_labels_text.FontUnits = "normalized";
 row_labels_text.FontWeight = "bold";
 row_labels_text.FontName = "Monospaced";
@@ -176,20 +175,27 @@ for i = 1:no_attempts
         square_xs = [grid_square_x, grid_square_x + 100, grid_square_x + 100, grid_square_x];
         square_ys = [grid_square_y, grid_square_y, grid_square_y + 100, grid_square_y + 100];
         
-        if grid_loc_y <= 9 &&
-        if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
-            score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
-            fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
-            image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
-            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
-            sprintf('Current Score: %d', score)
-            score_text.String = "Score: " + score;
-            turn_done = 1;
-        elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
-            fill(square_xs,square_ys,'black','FaceAlpha',0.3)
-            treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
-            sprintf('Current Score: %d', score)
-            turn_done = 1;
+        if grid_loc_x >= 0 && grid_loc_x <= 9 && grid_loc_y >= 0 && grid_loc_y <= 9 
+            if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 1
+                score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
+                fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
+                if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 2
+                    image([(grid_loc_x)*100 - 5, (grid_loc_x+1)*100 - 5], [(grid_loc_y)*100 - 5, (grid_loc_y+1)*100 - 5], coin, 'AlphaData', coin_alpha*0.5)
+                    image([(grid_loc_x)*100 + 5, (grid_loc_x+1)*100 + 5], [(grid_loc_y)*100 + 5, (grid_loc_y+1)*100 + 5], coin, 'AlphaData', coin_alpha*0.5)
+                else
+                    image([(grid_loc_x)*100, (grid_loc_x+1)*100], [(grid_loc_y)*100, (grid_loc_y+1)*100], coin, 'AlphaData', coin_alpha*0.5)
+                end
+                treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+                sprintf('Current Score: %d', score)
+                score_text.String = "Score: " + score;
+                turn_done = 1; 
+            
+            elseif treasure(grid_loc_y + 1, grid_loc_x + 1) == 0
+                fill(square_xs,square_ys,'black','FaceAlpha',0.3)
+                treasure(grid_loc_y + 1, grid_loc_x + 1) = -1;
+                sprintf('Current Score: %d', score)
+                turn_done = 1;
+            end
         end
     end
     turns_remaining = no_attempts-i;
