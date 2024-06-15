@@ -1,3 +1,19 @@
+% Game parameters
+no_landmark_types = 3; % how many types of landmark will appear
+no_true_landmark_types = 1; % how many types of landmark have coins
+no_landmarks_per_type = 3; % how many landmarks of the same type will appear
+no_attempts = 5*no_true_landmark_types*no_landmarks_per_type; % how many attempts the player has
+% We suggest setting no_attempts to equal the number of coins there are,
+% which the default setting ensures (since there are 5 coins per landmark)
+generate_random_pattern = true; % selects whether random coin patterns are used
+% If set to false, coins will always appear in a 'plus' shape for some
+% types of landmark and a 'cross' shape for others
+
+% If you're confident in how the code works, you could try changing the
+% grid size (8x8, 10x10 and 12x12 grid graphics are provided) or how the
+% treasure is generated. We leave the implementation up to you!
+
+% Set up background
 axes('Units', 'normalized', 'Position', [0 0 1 1])
 background = imread('resources/desert_island_background.jpg');
 image([-525, 1525], [-270, 1290], background);
@@ -10,17 +26,7 @@ axis off
 [grid_10_10, grid_10_10_map, grid_10_10_alpha] = imread('resources/grid_10_10.png');
 image([-10, 1010], [-10, 1010], grid_10_10, 'AlphaData', grid_10_10_alpha)
 
-no_clue_types = 3;
-no_true_clue_types = 1;
-no_clues_per_type = 3;
-no_attempts = 15;
-
-generate_random_pattern = true;
-a = [1 1 1 1 0 0 0 0];
-a_rand = a(randperm(length(a)));
-random_pattern = [a_rand(1:4) 1 a_rand(5:8)]
-
-% Load images
+% Load graphics
 [anchor, anchor_map, anchor_alpha] = imread('resources/anchor.png'); % ID: 1
 [barrel, barrel_map, barrel_alpha] = imread('resources/barrel.png'); % ID: 2
 [bush, bush_map, bush_alpha] = imread('resources/bush.png'); % ID: 3
@@ -36,7 +42,7 @@ pirate_boy_alpha = flip(pirate_boy_alpha, 2);
 [pirate_ship, pirate_ship_map, pirate_ship_alpha] = imread('resources/pirate_ship.png');
 [shadow, shadow_map, shadow_alpha] = imread('resources/shadow.png');
 
-
+% Add decorations to background
 image(-318, 640, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
 image(-380, 100, imresize(pirate_boy, 0.3), 'AlphaData', imresize(pirate_boy_alpha, 0.3))
 image(1046, 527, imresize(shadow, 1), 'AlphaData', imresize(shadow_alpha, 1)*0.3)
@@ -45,52 +51,57 @@ image(-535, 820, imresize(whale_tail,1), 'AlphaData', imresize(whale_tail_alpha,
 image(1040, 960, imresize(shadow, 2.15), 'AlphaData', imresize(shadow_alpha, 2.15)*0.3)
 image(1025, 640, imresize(pirate_ship,0.9), 'AlphaData', imresize(pirate_ship_alpha, 0.9))
 
-ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all clue types
+ID_list = [1, 2, 3, 4, 5, 6]; % list of IDs for all landmark types
 
-% create list of clues (subset of ID_list)
-clue_list = ID_list;
-for i=1:(numel(ID_list)-no_clue_types)
-    idx = randi(numel(clue_list));
-    clue_list(idx) = [];
+% create list of landmarks (subset of ID_list)
+landmark_list = ID_list;
+for i=1:(numel(ID_list)-no_landmark_types)
+    idx = randi(numel(landmark_list));
+    landmark_list(idx) = [];
 end
 
-% create list of true clues (subset of clue_list)
-true_clue_list = clue_list;
-for i=1:(numel(clue_list)-no_true_clue_types)
-    idx = randi(numel(true_clue_list));
-    true_clue_list(idx) = [];
+% create list of true landmarks (subset of landmark_list)
+true_landmark_list = landmark_list;
+for i=1:(numel(landmark_list)-no_true_landmark_types)
+    idx = randi(numel(true_landmark_list));
+    true_landmark_list(idx) = [];
 end
 
-available_clue_locations = zeros(10, 10);
-available_clue_locations(2:9,2:9) = 1; % don't let clues spawn on edges
+available_landmark_locations = zeros(10, 10);
+available_landmark_locations(2:9,2:9) = 1; % don't let landmarks spawn on edges
 
 treasure = zeros(10, 10);
 
+% If random coin patterns are used, generate the random pattern
+a = [1 1 1 1 0 0 0 0];
+a_rand = a(randperm(length(a)));
+random_pattern = [a_rand(1:4) 1 a_rand(5:8)];
+
 for ID=1:6
-    if ismember(ID,clue_list)
-        % randomly generate new clue location from available spots
-        for i = 1:no_clues_per_type
+    if ismember(ID,landmark_list)
+        % randomly generate new landmark location from available spots
+        for i = 1:no_landmarks_per_type
             is_valid = 0;
             it = 0;
             it_max = 1000;
             while is_valid == 0 && it < it_max
                 i_y = randi([2,9]);
                 i_x = randi([2,9]);
-                is_valid = available_clue_locations(i_y,i_x);
+                is_valid = available_landmark_locations(i_y,i_x);
                 it = it + 1;
             end
-            % stop future clues from spawning adjacent to this one
-            available_clue_locations(i_y-1,i_x-1) = 0;
-            available_clue_locations(i_y,i_x-1) = 0;
-            available_clue_locations(i_y-1,i_x) = 0;
-            available_clue_locations(i_y-1,i_x+1) = 0;
-            available_clue_locations(i_y,i_x) = 0;
-            available_clue_locations(i_y+1,i_x-1) = 0;
-            available_clue_locations(i_y+1,i_x) = 0;
-            available_clue_locations(i_y,i_x+1) = 0;
-            available_clue_locations(i_y+1,i_x+1) = 0;
-            if ismember(ID,true_clue_list)
-                % assign treasure around clue (TODO: replace with a function that can use a different pattern for each clue)
+            % stop future landmarks from spawning adjacent to this one
+            available_landmark_locations(i_y-1,i_x-1) = 0;
+            available_landmark_locations(i_y,i_x-1) = 0;
+            available_landmark_locations(i_y-1,i_x) = 0;
+            available_landmark_locations(i_y-1,i_x+1) = 0;
+            available_landmark_locations(i_y,i_x) = 0;
+            available_landmark_locations(i_y+1,i_x-1) = 0;
+            available_landmark_locations(i_y+1,i_x) = 0;
+            available_landmark_locations(i_y,i_x+1) = 0;
+            available_landmark_locations(i_y+1,i_x+1) = 0;
+            if ismember(ID,true_landmark_list)
+                % assign treasure around landmark
                 if generate_random_pattern
                     treasure = add_treasure_random(treasure,ID,i_y,i_x, random_pattern);
                 else
@@ -98,7 +109,7 @@ for ID=1:6
                 end
           
             end
-            % plot corresonding image for clue ID
+            % plot corresonding image for landmark ID
             if ID == 1
                 image([(i_x - 1 )*100, (i_x)*100], [(i_y - 1)*100, (i_y)*100], anchor, 'AlphaData', anchor_alpha)
             elseif ID == 2
@@ -118,8 +129,10 @@ end
 
 treasure;
 
+% Initialize score
 score = 0;
 
+% Score text
 score_text = text(825, -150, 'text');
 score_text.String = "Score: " + score;
 score_text.FontSize = 18;
@@ -131,6 +144,7 @@ score_text.BackgroundColor = 'white';
 score_text.EdgeColor = 'k';
 score_text.LineWidth = 2;
 
+% Turns remaining text
 turns_remaining_text = text(-225, -150, 'text');
 turns_remaining_text.String = "Turns Remaining: " + no_attempts;
 turns_remaining_text.FontSize = 18;
@@ -142,6 +156,7 @@ turns_remaining_text.BackgroundColor = 'white';
 turns_remaining_text.EdgeColor = 'k';
 turns_remaining_text.LineWidth = 2;
 
+% Column labels text
 column_labels_text = text(25, 1040, 'A B C D E F G H I J');
 column_labels_text.FontSize = 16.8;
 column_labels_text.FontUnits = "normalized";
@@ -149,6 +164,7 @@ column_labels_text.FontWeight = "bold";
 column_labels_text.FontName = "Monospaced";
 column_labels_text.Color = 'k';
 
+% Row labels text
 S = '9876543210';
 row_labels = cell(1, numel(S));
 for i = 1:numel(S)
@@ -161,6 +177,7 @@ row_labels_text.FontWeight = "bold";
 row_labels_text.FontName = "Monospaced";
 row_labels_text.Color = 'k';
 
+% Play the game
 for i = 1:no_attempts
     turn_done = 0;
     it = 0;
@@ -183,6 +200,7 @@ for i = 1:no_attempts
                 score = score + treasure(grid_loc_y + 1, grid_loc_x + 1);
                 fill(square_xs,square_ys,'yellow','FaceAlpha',0.3)
                 if treasure(grid_loc_y + 1, grid_loc_x + 1) >= 2
+                    % Plots two coins if more than one coin is buried in the selected tile
                     image([(grid_loc_x)*100 - 5, (grid_loc_x+1)*100 - 5], [(grid_loc_y)*100 - 5, (grid_loc_y+1)*100 - 5], coin, 'AlphaData', coin_alpha*0.5)
                     image([(grid_loc_x)*100 + 5, (grid_loc_x+1)*100 + 5], [(grid_loc_y)*100 + 5, (grid_loc_y+1)*100 + 5], coin, 'AlphaData', coin_alpha*0.5)
                 else

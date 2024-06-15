@@ -57,7 +57,9 @@ The activity runs more smoothly if the participant calls out their chosen tile (
 
 The game benefits from having two game operators at a time; one to operate the game from a laptop while the other interacts with the participant (perhaps giving them hints if they are stuck).
 
-We also suggest that you reward participants with a prize after playing; we offered chocolate gold coins as well as plastic coins and gems.
+We also suggest that you reward participants with a prize after playing; we offered chocolate gold coins as well as plastic coins and gems. It looks appealing if you pile them up in a 'treasure hoard' on a table near the screen.
+
+If you want to go the extra mile, we suggest wearing pirate hats and playing some piratical background music!
 
 ## Pre/Post Game Script
 
