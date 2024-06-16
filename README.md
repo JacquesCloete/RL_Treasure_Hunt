@@ -61,7 +61,7 @@ We also suggest that you reward participants with a prize after playing; we offe
 
 If you want to go the extra mile, we suggest wearing pirate hats and playing some piratical background music!
 
-## Pre/Post Game Script
+## Pre/Post-Game Script
 
 We provide an [example script](Script.md), for introducing the game to new players as well as discussing what they've learned after playing. The idea is that we want to introduce the rules of the game in an engaging and approachable way, as well as giving some hints to point them in the right direction. After the player has completed the game, we take the opportunity to draw a relation to reinforcement learning (again, in a way that is approachable to children).
 
@@ -77,7 +77,7 @@ Documentation Author: Jacques Cloete
 
 Pre/Post-Game Script Writer: Darius Muglich
 
-Credit to Luisa Kurth, Shozen Dan, Paula Cordero Encinar, Marcel Hedman and Rafael Brutti for helping to design the game.
+We thank Luisa Kurth, Shozen Dan, Paula Cordero Encinar, Marcel Hedman and Rafael Brutti for their suggestions that helped to shape the design of the game.
 
 ## Attributions for Graphics
 
