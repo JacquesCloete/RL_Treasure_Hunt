@@ -5,6 +5,8 @@
 
 ## Introduction
 
+### [Blog Post](https://tinyurl.com/rl-treasure-hunt)
+
 Ahoy there, adventurer! 🏴‍☠️
 
 In *Reinforcement Learning as a Treasure Hunt*, you are tasked with collecting as many coins as you can within a limited number of turns. The coins are buried on a desert island, hidden beneath the sand. However, they seem to follow a pattern in how they are buried, related to the many landmarks scattered around the island. Can you figure out the pattern, and use this to your advantage?
