@@ -3,9 +3,13 @@
 
 ![](resources/example.gif)
 
-## Introduction
+## Blog Posts
 
-### [Blog Post](https://tinyurl.com/rl-treasure-hunt)
+### [Case Study for Public Engagement with Research (PER)](https://tinyurl.com/rl-treasure-hunt)
+
+### [University of Oxford MPLS PER Training Programme -- WINNER (People's Choice Award)](https://www.mpls.ox.ac.uk/public-engagement/latest/celebrating-the-success-of-the-dphil-public-engagement-with-research-training-programme)
+
+## Introduction
 
 Ahoy there, adventurer! 🏴‍☠️
 
